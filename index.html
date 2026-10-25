@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BOODY CUBE STORE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+html{overflow-y:auto;overflow-x:hidden}
+body{background:#050507;color:#fff;overflow-y:auto;overflow-x:hidden;cursor:none}
+#cursor-ball{position:fixed;width:14px;height:14px;background:#00ffcc;border-radius:50%;pointer-events:none;z-index:99999;box-shadow:0 0 15px #00ffcc;left:0;top:0}
+#cursor-ring{position:fixed;width:38px;height:38px;border:1.5px solid #00ffcc33;border-radius:50%;pointer-events:none;z-index:99998;left:0;top:0}
+nav{position:fixed;top:0;width:100%;padding:16px 5%;display:flex;justify-content:space-between;z-index:100;background:#050507f0;border-bottom:1px solid #ffffff10}
+.hero{padding:120px 5% 0;display:flex;flex-direction:column;min-height:92vh;position:relative;z-index:2}
+.hero-text h1{font-size:clamp(52px,8.5vw,115px);line-height:.92;font-weight:900}
+.cy{color:#00ffcc}
+.badges{margin-top:50px;display:flex;gap:10px;flex-wrap:wrap}
+.badges span{background:#ffffff12;padding:8px 16px;border-radius:20px;font-size:12px}
+#cube-empty-space{width:100%;height:320px;display:flex;justify-content:center;align-items:center;margin-top:auto;perspective:1000px;opacity:.16}
+.main-cube-far{width:140px;height:140px;position:relative;transform-style:preserve-3d;animation:spinFar 7s linear infinite}
+@keyframes spinFar{0%{transform:rotateX(-20deg) rotateY(0deg)}100%{transform:rotateX(340deg) rotateY(720deg)}}
+.face{position:absolute;width:140px;height:140px;background:#0a0a0a;border:2px solid #000;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:4px;padding:4px;border-radius:6px}
+.face.f{transform:translateZ(70px)}.face.b{transform:rotateY(180deg) translateZ(70px)}.face.r{transform:rotateY(90deg) translateZ(70px)}.face.l{transform:rotateY(-90deg) translateZ(70px)}.face.u{transform:rotateX(90deg) translateZ(70px)}.face.d{transform:rotateX(-90deg) translateZ(70px)}
+.marquee{background:#00ffcc;color:#000;padding:8px 0;white-space:nowrap;overflow:hidden;font-weight:900;font-size:13px}
+.marquee span{display:inline-block;animation:marq 14s linear infinite} @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.section{padding:40px 5%}
+.admin{background:#0e0f14;border:2px solid #00ffcc66;border-radius:18px;padding:18px;margin-bottom:28px}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 200px 140px;gap:8px;align-items:end}
+.admin input{background:#000;border:1px solid #333;padding:12px;border-radius:10px;color:#fff;width:100%}
+.admin label{font-size:10px;opacity:.6;display:block;margin-bottom:4px}
+.upload-box{border:1px dashed #444;border-radius:10px;height:46px;display:flex;align-items:center;justify-content:center;position:relative;background:#000;overflow:hidden}
+.upload-box input{position:absolute;inset:0;opacity:0}
+.upload-preview{width:100%;height:100%;object-fit:contain;display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.card{background:#0c0c0e;border:1px solid #ffffff12;border-radius:22px;padding:14px;position:relative}
+.badge{position:absolute;top:12px;left:12px;background:#ff0040;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:900}
+.img-box{background:#111;border-radius:14px;height:230px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.img-box img{width:100%;height:100%;object-fit:contain}
+.price-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.old-price{text-decoration:line-through;opacity:.35;font-size:13px}
+.price{color:#00ffcc;font-size:21px;font-weight:900}
+.card-actions{display:flex;gap:6px;margin-top:12px}
+.card-actions button{flex:1;padding:11px;border-radius:10px;border:none;font-weight:900;cursor:pointer;font-size:11px}
+.btn-add{background:#fff;color:#000}.btn-edit{background:#ffcc00;color:#000}.btn-del{background:#ff004015;color:#ff4444}
+.comments{margin-top:14px;border-top:1px solid #ffffff0f;padding-top:10px}
+.comment{background:#050507;border:1px solid #ffffff10;border-radius:12px;padding:10px;margin-top:8px}
+.stars{color:#ffcc00}
+.comment-actions{display:flex;gap:6px;margin-top:6px}
+.comment-actions button{background:#ffffff12;border:none;color:#aaa;padding:5px 9px;border-radius:6px;font-size:10px;cursor:pointer}
+.btn-comment{width:100%;background:none;border:1px dashed #ffffff22;color:#aaa;padding:9px;border-radius:10px;margin-top:10px;cursor:pointer}
+.timer-section{background:linear-gradient(180deg,#0a0a0c,#050507);border-top:1px solid #ffffff0f;padding:70px 5%;text-align:center}
+.timer-box{background:#0e0f14;border:1px solid #00ffcc33;border-radius:24px;padding:30px;max-width:540px;margin:20px auto;box-shadow:0 0 60px #00ffcc14}
+.timer-display{font-size:68px;font-weight:900;letter-spacing:2px}
+.timer-phrase{color:#00ffcc;font-weight:900;margin-top:8px;font-size:18px;min-height:28px;transition:.2s}
+#commentModal{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;z-index:2000;padding:15px}
+.modal-box{background:#0e0f14;border:1px solid #ffffff15;border-radius:18px;padding:22px;width:420px;max-width:100%}
+.modal-box input,.modal-box textarea{width:100%;background:#000;border:1px solid #333;border-radius:8px;padding:11px;color:#fff;margin-top:8px}
+.star-input{display:flex;gap:5px;font-size:28px;cursor:pointer;margin:10px 0}
+.star-input span{opacity:.25}.star-input span.active{opacity:1;color:#ffcc00}
+#cart{position:fixed;top:0;left:-100%;width:400px;max-width:100%;height:100%;background:#08080a;z-index:1000;transition:.5s;padding:25px}
+#cart.active{left:0}
+@media(max-width:900px){.admin-grid{grid-template-columns:1fr 1fr}#cube-empty-space{height:240px;opacity:.12}.timer-display{font-size:48px}}
+</style>
+</head>
+<body>
+<div id="cursor-ball"></div><div id="cursor-ring"></div>
+<nav><div style="font-weight:900">BOODY<span style="color:#00ffcc">CUBE</span> 🧩</div><button onclick="document.getElementById('cart').classList.add('active')" style="background:#00ffcc;color:#000;border:none;padding:10px 18px;border-radius:10px;font-weight:900">🛒 <span id="count">0</span></button></nav>
+
+<section class="hero">
+<div class="hero-text">
+<h1>أسرع<br>متجر روبيك<br><span class="cy">في الكويت 🇰🇼</span></h1>
+<div class="badges"><span>⚡ شحن سريع</span><span>⭐ تقييمات العملاء</span></div>
+</div>
+<div id="cube-empty-space">
+<div class="main-cube-far">
+<div class="face f"><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span><span style="background:#ff0000"></span></div>
+<div class="face b"><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span><span style="background:#ff6a00"></span></div>
+<div class="face r"><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span><span style="background:#0046ff"></span></div>
+<div class="face l"><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span><span style="background:#00c800"></span></div>
+<div class="face u"><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span><span style="background:#ffffff"></span></div>
+<div class="face d"><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span><span style="background:#ffea00"></span></div>
+</div>
+</div>
+</section>
+
+<div class="marquee"><span>BOODY CUBE • دوس SPACE عشان تبدأ • BOODY CUBE •&nbsp;</span><span>BOODY CUBE • دوس SPACE عشان تبدأ • BOODY CUBE •&nbsp;</span></div>
+
+<section class="section">
+<div class="admin">
+<h3 id="formTitle" style="color:#00ffcc;margin-bottom:12px">➕ لوحة التحكم</h3>
+<div class="admin-grid">
+<div><label>اسم المنتج</label><input id="pName"></div>
+<div><label>السعر</label><input id="pPrice" type="text"></div>
+<div><label>السعر القديم</label><input id="pOldPrice" type="text"></div>
+<div><label>خصم %</label><input id="pDiscount" type="text"></div>
+<div><label>الصورة</label><div class="upload-box"><span id="uploadText">📁 صورة</span><img id="uploadPreview" class="upload-preview"><input type="file" id="pFile" accept="image/*"></div></div>
+<button id="mainBtn" style="background:#00ffcc;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900;height:46px">إضافة</button>
+</div>
+<button id="cancelEdit" style="display:none;margin-top:12px;background:#222;color:#fff;border:none;padding:8px 14px;border-radius:8px">إلغاء ✕</button>
+</div>
+<div class="grid" id="productGrid"></div>
+</section>
+
+<section class="timer-section">
+<h2 style="font-size:36px;font-weight:900">⏱️ اختبر سرعتك</h2>
+<p style="opacity:.5;margin-top:8px;font-size:13px">دوس <b style="color:#00ffcc">SPACE</b> عشان تبدأ / توقف</p>
+<div class="timer-box">
+<div class="timer-display" id="timerDisplay">00:00.00</div>
+<div class="timer-phrase" id="timerPhrase">جاهز؟ دوس SPACE يلا! 🚀</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+<button id="startBtn" style="background:#00ffcc;color:#000;border:none;padding:12px 24px;border-radius:10px;font-weight:900;cursor:pointer">Start ▶ (SPACE)</button>
+<button id="stopBtn" style="background:#fff;color:#000;border:none;padding:12px 24px;border-radius:10px;font-weight:900;cursor:pointer">Stop ■</button>
+<button id="resetBtn" style="background:#ffffff15;color:#fff;border:none;padding:12px 24px;border-radius:10px;cursor:pointer">Reset ↺</button>
+</div>
+<div style="margin-top:14px;background:#050507;border:1px solid #ffffff10;border-radius:12px;padding:10px;display:flex;justify-content:space-between">
+<span style="opacity:.5;font-size:12px">🏆 أحسن وقت</span><span id="bestTime" style="color:#00ffcc;font-weight:900">--:--.--</span>
+</div>
+</div>
+</section>
+
+<div id="commentModal"><div class="modal-box"><h3>⭐ تقييم</h3><p id="commentProductName" style="font-size:11px;opacity:.5"></p><input id="cName" placeholder="اسمك"><div class="star-input" id="starInput"><span data-s="1">★</span><span data-s="2">★</span><span data-s="3">★</span><span data-s="4">★</span><span data-s="5">★</span></div><textarea id="cText" rows="3" placeholder="رأيك؟"></textarea><div class="upload-box" style="margin-top:10px"><span id="cUploadText">📸 صورة</span><img id="cUploadPreview" class="upload-preview"><input type="file" id="cFile" accept="image/*"></div><div style="display:flex;gap:8px;margin-top:14px"><button onclick="closeComment()" style="flex:1;background:#222;color:#fff;border:none;padding:11px;border-radius:10px">إلغاء</button><button onclick="saveComment()" style="flex:1;background:#00ffcc;color:#000;border:none;padding:11px;border-radius:10px;font-weight:900">نشر ✅</button></div></div></div>
+<div id="cart"><h2>🛒 سلتك</h2><div id="items" style="margin:20px 0"></div><h3>الإجمالي: <span id="total" style="color:#00ffcc">0</span> د.ك</h3><input id="area" placeholder="المنطقة" style="width:100%;padding:12px;background:#111;border:1px solid #222;color:#fff;margin:10px 0;border-radius:8px"><input id="phone" placeholder="رقمك" style="width:100%;padding:12px;background:#111;border:1px solid #222;color:#fff;border-radius:8px"><button onclick="orderWA()" style="width:100%;background:#00ffcc;color:#000;border:none;padding:14px;font-weight:900;margin-top:10px;border-radius:10px">اطلب واتساب 🚀</button><br><br><button onclick="document.getElementById('cart').classList.remove('active')" style="background:none;border:none;color:#666">إغلاق</button></div>
+
+<script>
+document.addEventListener('wheel',e=>{ if(e.ctrlKey) e.preventDefault(); },{passive:false});
+document.addEventListener('keydown',e=>{ if((e.ctrlKey||e.metaKey)&&(e.key==='+'||e.key==='-'||e.key==='='||e.key==='0')) e.preventDefault(); });
+const ball=document.getElementById('cursor-ball'), ring=document.getElementById('cursor-ring');
+document.addEventListener('mousemove',e=>{ ball.style.left=(e.clientX-7)+'px'; ball.style.top=(e.clientY-7)+'px'; ring.style.left=(e.clientX-19)+'px'; ring.style.top=(e.clientY-19)+'px'; });
+
+let products=JSON.parse(localStorage.getItem('boody_final_v9')||'[]');
+if(products.length===0){ products=[{name:"MoYu RS3M MagLev 3x3",price:"3.900",oldPrice:"5.500",discount:"29",img:"https://cdn.shopify.com/s/files/1/0273/5377/0792/files/MoYu_RS3M_2021_MagLev_3x3_02.jpg",comments:[]}]; }
+let editIndex=-1,tempImg="",commentIndex=-1,commentEditIndex=-1,tempCommentImg="",currentStars=5;
+document.getElementById('pFile').addEventListener('change',function(){ let f=this.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ tempImg=e.target.result; document.getElementById('uploadPreview').src=tempImg; document.getElementById('uploadPreview').style.display='block'; document.getElementById('uploadText').style.display='none'; }; r.readAsDataURL(f); });
+document.getElementById('cFile').addEventListener('change',function(){ let f=this.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ tempCommentImg=e.target.result; document.getElementById('cUploadPreview').src=tempCommentImg; document.getElementById('cUploadPreview').style.display='block'; document.getElementById('cUploadText').style.display='none'; }; r.readAsDataURL(f); });
+document.querySelectorAll('#starInput span').forEach(s=>{ s.addEventListener('click',()=>{ currentStars=parseInt(s.dataset.s); updateStars(); }); });
+function updateStars(){ document.querySelectorAll('#starInput span').forEach((s,i)=>{ s.classList.toggle('active', i<currentStars); }); } updateStars();
+window.editProduct=function(i){ editIndex=i; let p=products[i]; document.getElementById('pName').value=p.name; document.getElementById('pPrice').value=p.price; document.getElementById('pOldPrice').value=p.oldPrice||""; document.getElementById('pDiscount').value=p.discount||""; tempImg=""; document.getElementById('uploadPreview').src=p.img; document.getElementById('uploadPreview').style.display='block'; document.getElementById('uploadText').style.display='none'; document.getElementById('formTitle').innerText="✏️ بتعدل: "+p.name; document.getElementById('mainBtn').innerText="حفظ ✅"; document.getElementById('mainBtn').style.background="#ffcc00"; document.getElementById('cancelEdit').style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); }
+window.deleteProduct=function(i){ if(confirm('تحذف؟')){ products.splice(i,1); saveAndRender(); } }
+window.addToCart=function(i){ cart.push({n:products[i].name,p:parseFloat(products[i].price)}); upd(); document.getElementById('cart').classList.add('active'); }
+window.openComment=function(pi,ci=-1){ commentIndex=pi; commentEditIndex=ci; document.getElementById('commentModal').style.display='flex'; document.getElementById('commentProductName').innerText=products[pi].name; document.getElementById('cUploadPreview').style.display='none'; document.getElementById('cUploadText').style.display='block'; document.getElementById('cFile').value=''; tempCommentImg=''; if(ci>-1){ let c=products[pi].comments[ci]; document.getElementById('cName').value=c.name; document.getElementById('cText').value=c.text; currentStars=c.stars||5; if(c.img){ tempCommentImg=c.img; document.getElementById('cUploadPreview').src=c.img; document.getElementById('cUploadPreview').style.display='block'; document.getElementById('cUploadText').style.display='none'; } }else{ document.getElementById('cName').value=''; document.getElementById('cText').value=''; currentStars=5; } updateStars(); }
+window.closeComment=function(){ document.getElementById('commentModal').style.display='none'; }
+window.saveComment=function(){ let name=document.getElementById('cName').value.trim()||"مجهول"; let text=document.getElementById('cText').value.trim(); if(!text) return alert('اكتب رأيك'); if(!products[commentIndex].comments) products[commentIndex].comments=[]; let obj={name:name,text:text,stars:currentStars,img:tempCommentImg||"",date:Date.now()}; if(commentEditIndex>-1){ if(!tempCommentImg) obj.img=products[commentIndex].comments[commentEditIndex].img; products[commentIndex].comments[commentEditIndex]=obj; }else products[commentIndex].comments.push(obj); closeComment(); saveAndRender(); }
+window.deleteComment=function(pi,ci){ if(confirm('تحذف؟')){ products[pi].comments.splice(ci,1); saveAndRender(); } }
+window.editComment=function(pi,ci){ openComment(pi,ci); }
+function saveAndRender(){
+  localStorage.setItem('boody_final_v9',JSON.stringify(products));
+  let g=document.getElementById('productGrid'); g.innerHTML="";
+  products.forEach((p,i)=>{
+    let badge=p.discount?`<div class="badge">-${p.discount}%</div>`:"";
+    let oldP=p.oldPrice?`<span class="old-price">${p.oldPrice} د.ك</span>`:"";
+    let avg = p.comments && p.comments.length? (p.comments.reduce((a,c)=>a+(c.stars||5),0)/p.comments.length).toFixed(1) : "";
+    let avgHtml = avg? `⭐ ${avg} (${p.comments.length})` : `لا تقييمات`;
+    let commentsHtml=""; if(p.comments) p.comments.forEach((c,ci)=>{ let stars='★'.repeat(c.stars||5)+'☆'.repeat(5-(c.stars||5)); commentsHtml+=`<div class="comment"><div style="display:flex;justify-content:space-between"><div style="display:flex;gap:8px;align-items:center">${c.img?`<img src="${c.img}" style="width:42px;height:42px;border-radius:8px;object-fit:cover">`:""}<div><b style="font-size:12px">${c.name}</b><div class="stars">${stars}</div></div></div><span style="font-size:10px;opacity:.4">${new Date(c.date).toLocaleDateString('ar-EG')}</span></div><p style="font-size:12px;margin-top:6px">${c.text}</p><div class="comment-actions"><button onclick="editComment(${i},${ci})">✏️ تعديل</button><button onclick="deleteComment(${i},${ci})" style="color:#ff4444">🗑️ حذف</button></div></div>`; });
+    g.innerHTML+=`<div class="card">${badge}<div class="img-box"><img src="${p.img}"></div><h3 style="margin:12px 0 4px;font-size:15px;min-height:40px">${p.name}</h3><div class="price-row"><div class="price">${p.price} د.ك</div>${oldP}<span style="font-size:11px;opacity:.6">${avgHtml}</span></div><div class="card-actions"><button class="btn-add" onclick="addToCart(${i})">أضف</button><button class="btn-edit" onclick="editProduct(${i})">تعديل</button><button class="btn-del" onclick="deleteProduct(${i})">حذف</button></div><div class="comments">${commentsHtml}<button class="btn-comment" onclick="openComment(${i})">+ تقييم ⭐</button></div></div>`;
+  });
+}
+saveAndRender();
+document.getElementById('mainBtn').onclick=function(){
+  let n=document.getElementById('pName').value.trim(); let pr=document.getElementById('pPrice').value.trim(); let oldP=document.getElementById('pOldPrice').value.trim(); let disc=document.getElementById('pDiscount').value.trim();
+  if(!n||!pr) return alert('الاسم والسعر'); let img=tempImg; if(editIndex>-1 &&!img) img=products[editIndex].img; if(!img) return alert('صورة'); let data={name:n,price:pr,oldPrice:oldP,discount:disc,img:img,comments: editIndex>-1? (products[editIndex].comments||[]) : [] };
+  if(editIndex>-1){ products[editIndex]=data; editIndex=-1; }else products.unshift(data);
+  document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pOldPrice').value=''; document.getElementById('pDiscount').value=''; document.getElementById('pFile').value=''; tempImg=''; document.getElementById('uploadPreview').style.display='none'; document.getElementById('uploadText').style.display='block'; document.getElementById('formTitle').innerText="➕ لوحة التحكم"; document.getElementById('mainBtn').innerText="إضافة"; document.getElementById('mainBtn').style.background="#00ffcc"; document.getElementById('cancelEdit').style.display='none'; saveAndRender();
+};
+document.getElementById('cancelEdit').onclick=function(){ editIndex=-1; document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pOldPrice').value=''; document.getElementById('pDiscount').value=''; tempImg=''; document.getElementById('uploadPreview').style.display='none'; document.getElementById('uploadText').style.display='block'; this.style.display='none'; };
+let cart=[]; function upd(){ document.getElementById('count').innerText=cart.length; let h='',t=0; cart.forEach((c,i)=>{h+=`<div style="display:flex;justify-content:space-between;margin:8px 0;font-size:13px"><span>${c.n}</span><span>${c.p} <span onclick="cart.splice(${i},1);upd()" style="color:#f44;cursor:pointer"> x</span></span></div>`;t+=c.p}); document.getElementById('items').innerHTML=h||'فارغة'; document.getElementById('total').innerText=t.toFixed(3); }
+function orderWA(){ let a=document.getElementById('area').value, ph=document.getElementById('phone').value; if(!ph) return alert('رقمك'); let txt=`طلب:%0A${cart.map(c=>c.n).join('%0A')}%0A${document.getElementById('total').innerText} د.ك%0A${a}%0A${ph}`; window.open(`https://wa.me/201558983123?text=${txt}`,'_blank'); }
+
+// === التايمر القديم + جمل + SPACE ===
+let timerInterval=null,startTime=0,elapsed=0,running=false;
+let best=parseInt(localStorage.getItem('boody_best_time')||'0');
+function fmt(ms){ let cs=Math.floor((ms%1000)/10), s=Math.floor(ms/1000%60), m=Math.floor(ms/60000); return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(cs).padStart(2,'0')}`; }
+document.getElementById('bestTime').innerText=best?fmt(best):'--:--.--';
+
+const phrasesStart = ["يلاااا! 🚀","GOOO! ⚡","جاهز يا وحش؟ 🔥","ابدأ! 🧩"];
+const phrasesRunning = ["أسرع! ⚡","عاااش! 🔥","كمل! 💪","يلا قربت! 🧩","وحش! 👑","خليك سريع!"];
+const phrasesGood = ["عااااش يا بطل! 👑","أسطوري! 🔥","خرافي! ⚡","جامد جدا! 💪","BOODY CUBE PRO! 🧩"];
+const phrasesBad = ["حاول تاني! 😉","لسه بدري!","عاش بس تقدر أسرع! 💪"];
+
+function random(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function startTimer(){
+  if(running) return;
+  running=true;
+  startTime=Date.now()-elapsed;
+  document.getElementById('timerPhrase').innerText=random(phrasesStart);
+  timerInterval=setInterval(()=>{
+    elapsed=Date.now()-startTime;
+    document.getElementById('timerDisplay').innerText=fmt(elapsed);
+    if(elapsed%900<50) document.getElementById('timerPhrase').innerText=random(phrasesRunning);
+  },16);
+}
+function stopTimer(){
+  if(!running) return;
+  running=false;
+  clearInterval(timerInterval);
+  let time=fmt(elapsed);
+  if(best===0||elapsed<best){
+    best=elapsed; localStorage.setItem('boody_best_time',best);
+    document.getElementById('bestTime').innerText=time;
+    document.getElementById('timerPhrase').innerText=`رقم جديد! ${time} ${random(phrasesGood)}`;
+  }else{
+    if(elapsed<10000) document.getElementById('timerPhrase').innerText=`${time} - ${random(phrasesGood)}`;
+    else document.getElementById('timerPhrase').innerText=`${time} - ${random(phrasesBad)}`;
+  }
+}
+function resetTimer(){
+  clearInterval(timerInterval); running=false; elapsed=0;
+  document.getElementById('timerDisplay').innerText="00:00.00";
+  document.getElementById('timerPhrase').innerText="جاهز؟ دوس SPACE يلا! 🚀";
+}
+
+document.getElementById('startBtn').onclick=startTimer;
+document.getElementById('stopBtn').onclick=stopTimer;
+document.getElementById('resetBtn').onclick=resetTimer;
+
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space' &&!e.target.matches('input,textarea')){
+    e.preventDefault();
+    if(running) stopTimer(); else startTimer();
+  }
+});
+</script>
+</body>
+</html>
